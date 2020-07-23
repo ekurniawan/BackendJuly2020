@@ -54,5 +54,43 @@ namespace BackendJuly2020.DAL
                 }
             }
         }
+
+        public Employee GetById(int id)
+        {
+            Employee objEmp = new Employee();
+            using (SqlConnection conn = new SqlConnection(GetConn()))
+            {
+                string strSql = @"select * from Employees 
+                                  where EmployeeId=@EmployeeId";
+                SqlCommand cmd = new SqlCommand(strSql, conn);
+                cmd.Parameters.AddWithValue("@EmployeeId", id);
+
+                try
+                {
+                    conn.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        dr.Read();
+                        objEmp.EmployeeId = Convert.ToInt32(dr["EmployeeId"]);
+                        objEmp.EmployeeName = dr["EmployeeName"].ToString();
+                        objEmp.Designation = dr["Designation"].ToString();
+                        objEmp.Qualification = dr["Qualification"].ToString();
+                        objEmp.Department = dr["Department"].ToString();
+                    }
+                    dr.Close();
+                    return objEmp;
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                    conn.Close();
+                }
+            }
+        }
     }
 }
