@@ -35,8 +35,17 @@ namespace BackendJuly2020.Controllers
         }
 
         // POST: api/Employee
-        public void Post([FromBody]string value)
+        public IHttpActionResult Post(Employee emp)
         {
+            try
+            {
+                _empDAL.Insert(emp);
+                return Ok($"Data Employee {emp.EmployeeName} berhasil ditambah");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT: api/Employee/5

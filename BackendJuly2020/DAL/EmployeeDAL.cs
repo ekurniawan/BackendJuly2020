@@ -135,5 +135,33 @@ namespace BackendJuly2020.DAL
                 }
             }
         }
+
+        public void Insert(Employee emp)
+        {
+            using (SqlConnection conn = new SqlConnection(GetConn()))
+            {
+                string strSql = @"insert into Employees(EmployeeName,Designation,Qualification,Department) 
+                                values(@EmployeeName,@Designation,@Qualification,@Department)";
+                SqlCommand cmd = new SqlCommand(strSql, conn);
+                cmd.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
+                cmd.Parameters.AddWithValue("@Designation", emp.Designation);
+                cmd.Parameters.AddWithValue("@Qualification", emp.Qualification);
+                cmd.Parameters.AddWithValue("@Department", emp.Department);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                    conn.Close();
+                }
+            }
+        }
     }
 }
