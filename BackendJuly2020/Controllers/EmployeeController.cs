@@ -24,9 +24,9 @@ namespace BackendJuly2020.Controllers
         }
 
         // GET: api/Employee/5
-        public string Get(int id)
+        public Employee Get(int id)
         {
-            return "value";
+            return _empDAL.GetById(id);
         }
 
         // POST: api/Employee
