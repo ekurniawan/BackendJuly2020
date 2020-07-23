@@ -1,4 +1,5 @@
-﻿using BackendJuly2020.Models;
+﻿using BackendJuly2020.DAL;
+using BackendJuly2020.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,16 @@ namespace BackendJuly2020.Controllers
 {
     public class EmployeeController : ApiController
     {
-        //
+        private EmployeeDAL _empDAL;
+        public EmployeeController()
+        {
+            _empDAL = new EmployeeDAL();
+        }
+
         // GET: api/Employee
         public IEnumerable<Employee> Get()
         {
-            List<Employee> lstEmployee = new List<Employee>
-            {
-                new Employee {EmployeeId=1,EmployeeName="Erick",
-                Designation="Mobile Dev",Department="IT",Qualification="Xamarin Forms"},
-                new Employee {EmployeeId=2,EmployeeName="Roger",
-                Designation="Web Dev",Department="IT",Qualification="Asp Core"}
-            };
-            return lstEmployee;
+            return _empDAL.GetAll();
         }
 
         // GET: api/Employee/5
