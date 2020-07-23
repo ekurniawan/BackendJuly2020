@@ -163,5 +163,59 @@ namespace BackendJuly2020.DAL
                 }
             }
         }
+
+        public void Update(Employee emp)
+        {
+            using (SqlConnection conn = new SqlConnection(GetConn()))
+            {
+                string strSql = @"update Employees set EmployeeName=@EmployeeName,
+                Designation=@Designation,Qualification=@Qualification,Department=@Department 
+                where EmployeeId=@EmployeeId";
+                SqlCommand cmd = new SqlCommand(strSql, conn);
+                cmd.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
+                cmd.Parameters.AddWithValue("@Designation", emp.Designation);
+                cmd.Parameters.AddWithValue("@Qualification", emp.Qualification);
+                cmd.Parameters.AddWithValue("@Department", emp.Department);
+                cmd.Parameters.AddWithValue("@EmployeeId", emp.EmployeeId);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                    conn.Close();
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(GetConn()))
+            {
+                string strSql = @"delete from Employees where EmployeeId=@EmployeeId";
+                SqlCommand cmd = new SqlCommand(strSql, conn);
+                cmd.Parameters.AddWithValue("@EmployeeId", id);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                    conn.Close();
+                }
+            }
+        }
     }
 }

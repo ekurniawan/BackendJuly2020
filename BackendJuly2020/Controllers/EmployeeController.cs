@@ -49,13 +49,31 @@ namespace BackendJuly2020.Controllers
         }
 
         // PUT: api/Employee/5
-        public void Put(int id, [FromBody]string value)
+        public IHttpActionResult Put(Employee emp)
         {
+            try
+            {
+                _empDAL.Update(emp);
+                return Ok($"Data emp dengan Id {emp.EmployeeId} berhasil diupdate");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Employee/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
+            try
+            {
+                _empDAL.Delete(id);
+                return Ok($"Data Employee dengan id {id} berhasil di delete");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
