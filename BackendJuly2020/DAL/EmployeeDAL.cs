@@ -92,5 +92,48 @@ namespace BackendJuly2020.DAL
                 }
             }
         }
+
+        public IEnumerable<Employee> GetByName(string name)
+        {
+            List<Employee> lstEmp = new List<Employee>();
+            using (SqlConnection conn = new SqlConnection(GetConn()))
+            {
+                string strSql = @"select * from Employees 
+                                where EmployeeName like @EmployeeName
+                                order by EmployeeName asc";
+                SqlCommand cmd = new SqlCommand(strSql, conn);
+                cmd.Parameters.AddWithValue("@EmployeeName", "%" + name + "%");
+                try
+                {
+                    conn.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            lstEmp.Add(new Employee
+                            {
+                                EmployeeId = Convert.ToInt32(dr["EmployeeId"]),
+                                EmployeeName = dr["EmployeeName"].ToString(),
+                                Designation = dr["Designation"].ToString(),
+                                Department = dr["Department"].ToString(),
+                                Qualification = dr["Qualification"].ToString()
+                            });
+                        }
+                    }
+                    dr.Close();
+                    return lstEmp;
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception(sqlEx.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                    conn.Close();
+                }
+            }
+        }
     }
 }

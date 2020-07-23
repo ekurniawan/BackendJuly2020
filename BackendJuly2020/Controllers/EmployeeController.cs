@@ -29,6 +29,11 @@ namespace BackendJuly2020.Controllers
             return _empDAL.GetById(id);
         }
 
+        public IEnumerable<Employee> Get(string name)
+        {
+            return _empDAL.GetByName(name);
+        }
+
         // POST: api/Employee
         public void Post([FromBody]string value)
         {
